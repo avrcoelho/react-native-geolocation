@@ -1,7 +1,13 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 export default {
-  uri: process.env.DB_URL || 'mongodb://localhost:27017/geolocation',
+  dialect: 'postgres',
+  host: '127.0.0.1',
+  username: 'root',
+  password: 'root',
+  database: 'maps',
+  operatorAliases: false,
+  define: {
+    timestamp: true,
+    underscored: true,
+    underscoredAll: true,
+  },
 };

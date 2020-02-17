@@ -1,24 +1,19 @@
-import mongoose from 'mongoose';
+import Sequelize, { Model } from 'sequelize';
 
-const PointSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    latitude: {
-      type: Number,
-      required: true,
-    },
-    longitude: {
-      type: Number,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+class Point extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        name: Sequelize.STRING,
+        latitude: Sequelize.DECIMAL(6, 9),
+        longitude: Sequelize.DECIMAL(6, 9),
+        name: Sequelize.STRING,
+      },
+      {
+        sequelize,
+      },
+    );
+  }
+}
 
-export default mongoose.model('Points', PointSchema);
+export default Point;

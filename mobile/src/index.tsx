@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import GeoLocation from '@react-native-community/geolocation';
 
 import api from './services/api';
@@ -8,6 +8,13 @@ import api from './services/api';
 type ICoordenates = {
   latitude: number;
   longitude: number;
+};
+
+type IData = {
+  latitude: number;
+  longitude: number;
+  id: number;
+  name: string;
 };
 
 const styles = StyleSheet.create({
@@ -27,6 +34,7 @@ const App: React.FC = () => {
     latitude: 0,
     longitude: 0,
   });
+  const [points, setPoints] = useState<Array<any>>([]);
 
   useEffect(() => {
     // obtem a posição do usuario
@@ -44,7 +52,36 @@ const App: React.FC = () => {
     );
   }, [coordinates]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const { data }: { data: IData[] } = await api.get('/points', {
+          params: coordinates,
+        });
+
+        setPoints(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (coordinates) {
+      getData();
+    }
+  }, [coordinates]);
+
+  function renderPoints() {
+    return points.map((point: IData) => (
+      <Marker
+        key={point.id}
+        coordinate={{
+          latitude: point.latitude,
+          longitude: point.longitude,
+        }}
+        title={point.name}
+      />
+    ));
+  }
 
   return (
     <View style={[StyleSheet.absoluteFill, styles.container]}>
@@ -58,8 +95,9 @@ const App: React.FC = () => {
             latitudeDelta: 0.0068,
             longitudeDelta: 0.0068,
           }}
-          style={styles.map}
-        />
+          style={styles.map}>
+          {renderPoints()}
+        </MapView>
       )}
     </View>
   );

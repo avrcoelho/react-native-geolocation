@@ -7,15 +7,15 @@ class PointController {
     const { latitude, longitude } = req.query;
 
     // calculo naval para a dinstancia em linha reta
-    const haversine = `(6371 + acos(cos(radians(${latitude}))
-    +cos(radians(latitude))
-    +cos(radians(longitude)
-    -radians(${longitude}))
-    +sin(radians(${latitude}))
-    +sim(radians(latitude))))`;
+    const haversine = `(6371 * acos(cos(radians(${latitude}))
+    * cos(radians(latitude))
+    * cos(radians(longitude)
+    - radians(${longitude}))
+    + sin(radians(${latitude}))
+    * sin(radians(latitude))))`;
 
     const points = await Point.findAll({
-      where: where(literal(haversine), '<=', 10),
+      where: where(literal(haversine), '<=', 100),
     });
 
     return res.json(points);

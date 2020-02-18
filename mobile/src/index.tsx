@@ -3,6 +3,8 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 import GeoLocation from '@react-native-community/geolocation';
 
+import api from './services/api';
+
 type ICoordenates = {
   latitude: number;
   longitude: number;
@@ -41,6 +43,8 @@ const App: React.FC = () => {
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 },
     );
   }, [coordinates]);
+
+  useEffect(() => {}, []);
 
   return (
     <View style={[StyleSheet.absoluteFill, styles.container]}>
